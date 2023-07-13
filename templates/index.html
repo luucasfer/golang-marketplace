@@ -29,18 +29,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {{range .}}
                         <tr>
-                            <td>TShirt</td>
-                            <td>Black</td>
-                            <td>29</td>
-                            <td>4</td>
+                            <td>{{.Name}}</td>
+                            <td>{{.Description}}</td>
+                            <td>{{.Price}}</td>
+                            <td>{{.Quantity}}</td>
                         </tr>
-                        <tr>
-                            <td>Shoes</td>
-                            <td>Air Jordan 3</td>
-                            <td>600</td>
-                            <td>2</td>
-                        </tr>
+                        {{end}}
                     </tbody>
                 </table>
             </div>
