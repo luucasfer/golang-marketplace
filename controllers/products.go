@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 	"text/template"
-
 	"remote-repo.com/lucas/webapp/models"
 )
 
@@ -39,5 +38,12 @@ func InsertProduct(w http.ResponseWriter, r *http.Request) {
 
 		models.SaveNewProduct(name, description, priceFloat, quantityInt)
 	}
+	http.Redirect(w, r, "/", 301)
+}
+
+
+func DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	productId := r.URL.Query().Get("id")
+	models.DeleteSelectedProduct(productId)
 	http.Redirect(w, r, "/", 301)
 }

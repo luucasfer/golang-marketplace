@@ -31,6 +31,7 @@ func SearchAllProducts() []Products {
 			panic(err.Error())
 		}
 
+		eachProduct.Id = id
 		eachProduct.Name = productname
 		eachProduct.Description = description
 		eachProduct.Price = price
@@ -50,5 +51,16 @@ func SaveNewProduct(productname string, description string, price float64, quant
 	}
 
 	insertNewProduct.Exec(productname, description, price, quantity)
+	defer db.Close()
+}
+
+func DeleteSelectedProduct(id string) {
+	db := db.ConnPostgres()
+	delete, err := db.Prepare("delete from tbproducts where id = $1")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	delete.Exec(id)
 	defer db.Close()
 }
