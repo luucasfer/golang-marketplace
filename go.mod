@@ -1,4 +1,4 @@
-module webapp
+module remote-repo.com/lucas/webapp
 
 go 1.20
 
