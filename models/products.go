@@ -14,7 +14,7 @@ type Products struct {
 func SearchAllProducts() []Products {
 		
 	db := db.ConnPostgres()
-	selectProducts, err :=db.Query("select * from tbproducts")
+	selectProducts, err :=db.Query("select * from tbproducts order by id asc")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -65,7 +65,6 @@ func DeleteSelectedProduct(id string) {
 	defer db.Close()
 }
 
-
 func EditSelectedProduct(id string) Products {
 	db := db.ConnPostgres()
 	productToEdit, err := db.Query("select * from tbproducts where id = $1", id)
@@ -84,6 +83,7 @@ func EditSelectedProduct(id string) Products {
 			panic(err.Error())
 		}
 
+		newProductData.Id = id
 		newProductData.Name = productname
 		newProductData.Description = description
 		newProductData.Price = price
@@ -91,4 +91,15 @@ func EditSelectedProduct(id string) Products {
 	}
 	defer db.Close()
 	return newProductData
+}
+
+func UpdateSelectedProduct(id int, productname string, description string, price float64, quantity int){
+	db := db.ConnPostgres()
+	productToUpdate, err := db.Prepare("update tbproducts set productname=$2, description=$3, price=$4, quantity=$5 where id = $1")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	productToUpdate.Exec(id, productname, description, price, quantity)
+	defer db.Close()
 }
