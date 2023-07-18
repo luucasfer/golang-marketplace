@@ -64,3 +64,31 @@ func DeleteSelectedProduct(id string) {
 	delete.Exec(id)
 	defer db.Close()
 }
+
+
+func EditSelectedProduct(id string) Products {
+	db := db.ConnPostgres()
+	productToEdit, err := db.Query("select * from tbproducts where id = $1", id)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	newProductData := Products{}
+	for productToEdit.Next(){
+		var id, quantity int
+		var productname, description string
+		var price float64
+
+		err = productToEdit.Scan(&id, &productname, &description, &price, &quantity)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		newProductData.Name = productname
+		newProductData.Description = description
+		newProductData.Price = price
+		newProductData.Quantity = quantity 
+	}
+	defer db.Close()
+	return newProductData
+}
